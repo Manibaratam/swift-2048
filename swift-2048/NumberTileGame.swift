@@ -83,8 +83,12 @@ class NumberTileGameViewController : UIViewController, GameModelProtocol {
     let m = model!
     b.reset()
     m.reset()
-    m.insertTileAtRandomLocation(withValue: 2)
-    m.insertTileAtRandomLocation(withValue: 2)
+    
+    let randomVal1 = Int(arc4random_uniform(10))
+    m.insertTileAtRandomLocation(withValue: randomVal1 == 1 ? 1024 : 2048)
+    let randomVal2 = Int(arc4random_uniform(10))
+    m.insertTileAtRandomLocation(withValue: randomVal2 == 1 ? 1024 : 2048)
+
   }
 
   func setupGame() {
@@ -153,8 +157,10 @@ class NumberTileGameViewController : UIViewController, GameModelProtocol {
 
     assert(model != nil)
     let m = model!
-    m.insertTileAtRandomLocation(withValue: 2)
-    m.insertTileAtRandomLocation(withValue: 2)
+    let randomVal1 = Int(arc4random_uniform(10))
+    m.insertTileAtRandomLocation(withValue: randomVal1 == 1 ? 1024 : 2048)
+    let randomVal2 = Int(arc4random_uniform(10))
+    m.insertTileAtRandomLocation(withValue: randomVal2 == 1 ? 1024 : 2048)
   }
 
   // Misc
@@ -174,8 +180,8 @@ class NumberTileGameViewController : UIViewController, GameModelProtocol {
     }
 
     // Now, insert more tiles
-    let randomVal = Int(arc4random_uniform(10))
-    m.insertTileAtRandomLocation(withValue: randomVal == 1 ? 4 : 2)
+    let randomVal1 = Int(arc4random_uniform(10))
+    m.insertTileAtRandomLocation(withValue: randomVal1 == 1 ? 1024 : 2048)
 
     // At this point, the user may lose
     if m.userHasLost() {

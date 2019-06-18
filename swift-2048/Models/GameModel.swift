@@ -187,7 +187,7 @@ class GameModel : NSObject {
     for i in 0..<dimension {
       for j in 0..<dimension {
         // Look for a tile with the winning score or greater
-        if case let .tile(v) = gameboard[i, j], v >= threshold {
+        if case let .tile(v) = gameboard[i, j], v == 2 {
           return (true, (i, j))
         }
       }
@@ -237,8 +237,9 @@ class GameModel : NSObject {
           // Perform a single-tile move
           let (sx, sy) = coords[s]
           let (dx, dy) = coords[d]
+          let new = threshold/v
           if wasMerge {
-            score += v
+            score += new
           }
           gameboard[sx, sy] = TileObject.empty
           gameboard[dx, dy] = TileObject.tile(v)
@@ -248,7 +249,10 @@ class GameModel : NSObject {
           let (s1x, s1y) = coords[s1]
           let (s2x, s2y) = coords[s2]
           let (dx, dy) = coords[d]
-          score += v
+          
+          let new = threshold/v
+
+          score += new
           gameboard[s1x, s1y] = TileObject.empty
           gameboard[s2x, s2y] = TileObject.empty
           gameboard[dx, dy] = TileObject.tile(v)
@@ -311,7 +315,9 @@ class GameModel : NSObject {
         // This tile hasn't moved yet, but matches the next tile. This is a single merge
         // The last tile is *not* eligible for a merge
         let next = group[idx+1]
-        let nv = v + group[idx+1].getValue()
+        //let nv = v + group[idx+1].getValue()
+        let nv = v / 2
+ 
         skipNext = true
         tokenBuffer.append(ActionToken.singleCombine(source: next.getSource(), value: nv))
       case let t where (idx < group.count-1 && t.getValue() == group[idx+1].getValue()):
@@ -319,7 +325,10 @@ class GameModel : NSObject {
         // (The tile may either have moved prevously, or the tile might have moved as a result of a previous merge)
         // The last tile is *not* eligible for a merge
         let next = group[idx+1]
-        let nv = t.getValue() + group[idx+1].getValue()
+        //let nv = t.getValue() + group[idx+1].getValue()
+        
+        let nv = t.getValue() / 2
+
         skipNext = true
         tokenBuffer.append(ActionToken.doubleCombine(source: t.getSource(), second: next.getSource(), value: nv))
       case let .noAction(s, v) where !GameModel.quiescentTileStillQuiescent(inputPosition: idx, outputLength: tokenBuffer.count, originalPosition: s):
